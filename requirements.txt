@@ -1,0 +1,10 @@
+matplotlib # Only for dev
+scipy
+sklearn
+pandas
+numpy
+folium # for map display
+geopy
+requests
+shapely
+fastprogress # Progress bar
