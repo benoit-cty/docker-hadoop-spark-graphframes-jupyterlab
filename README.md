@@ -31,11 +31,11 @@ docker run -it \
 ```
 
 Availiable URL :
-- (Hadoop Web console)[http://localhost:9870]
-- (Hadoop DataNode)[http://localhost:9864]
-- (Hadoop)[http://localhost:8088]
-- (Spark Master Web Console)[http://localhost:8080]
-- (Spark History Server)[http://localhost:18080]
-- (Spark Notebooks)[http://localhost:8889]
-- (Standard Notebooks)[http://localhost:7988]
+- [Hadoop Web console](http://localhost:9870)
+- [Hadoop DataNode](http://localhost:9864)
+- [Hadoop](http://localhost:8088)
+- [Spark Master Web Console](http://localhost:8080)
+- [Spark History Server](http://localhost:18080)
+- [Spark Notebooks](http://localhost:8889)
+- [Standard Notebooks](http://localhost:7988)
 
