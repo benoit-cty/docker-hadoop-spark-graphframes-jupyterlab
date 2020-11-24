@@ -22,15 +22,16 @@ echo "started spark history"
 # options: https://gerardnico.com/db/spark/pyspark/pyspark
 $SPARK_HOME/bin/pyspark \
     --packages $PYSPARK_PACKAGES \
-    --master $PYSPARK_MASTER > /tmp/jupyter.log 2>&1 &
+    --master $PYSPARK_MASTER &
+
+#    --master $PYSPARK_MASTER > /tmp/jupyter.log 2>&1 &
 echo "started pyspark"
 
+hdfs dfs -mkdir /demo
+hdfs dfs -copyFromLocal -f /usr/local/spark/data /demo/spark
+
 if [ -d "/root/ipynb/data" ]; then
-    for entry in /root/ipynb/data/*
-    do
-        hdfs dfs -copyFromLocal -f $entry /$(basename $entry)
-        echo "copied $entry to hdfs"
-    done
+        hdfs dfs -copyFromLocal -f /root/ipynb/data /demo/
 else
     echo "/root/ipynb/data does not exists"
 fi
@@ -40,7 +41,7 @@ cd /root/ipynb && jupyter lab --ip='*' --port=7988 --no-browser --allow-root  --
 
 echo "done!"
 
-while sleep 60; do
+while sleep 600; do
   ps aux |grep jupyter |grep -q -v grep
   PROCESS_1_STATUS=$?
   ps aux |grep spark |grep -q -v grep

@@ -26,7 +26,7 @@ ENV NOTEBOOK_PASSWORD=""
 # setup Debian
 RUN apt-get update -y \
     && apt-get upgrade -y \
-    && apt-get -y install default-jdk wget openssh-server sshpass supervisor \
+    && apt-get -y install default-jdk wget openssh-server sshpass \
     && apt-get -y install nano net-tools lynx \
     && apt-get clean
 
