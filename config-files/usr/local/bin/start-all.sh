@@ -26,12 +26,13 @@ $SPARK_HOME/bin/pyspark \
 
 #    --master $PYSPARK_MASTER > /tmp/jupyter.log 2>&1 &
 echo "started pyspark"
-
-hdfs dfs -mkdir /demo
-hdfs dfs -copyFromLocal -f /usr/local/spark/data /demo/spark
+echo "Copying local files to HDFS..."
+hdfs dfs -mkdir -p /demo
+hdfs dfs -mkdir -p /data
+hdfs dfs -copyFromLocal -f /usr/local/spark/data/* /data/
 
 if [ -d "/root/ipynb/data" ]; then
-        hdfs dfs -copyFromLocal -f /root/ipynb/data /demo/
+        hdfs dfs -copyFromLocal -f /root/ipynb/data/* /demo/
 else
     echo "/root/ipynb/data does not exists"
 fi

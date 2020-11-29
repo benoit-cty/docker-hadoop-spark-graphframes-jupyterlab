@@ -97,4 +97,3 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 COPY config-files/usr/local/bin/start-all.sh /usr/local/bin/start-all.sh
 RUN chmod a+x /usr/local/bin/start-all.sh
 ENTRYPOINT [ "/usr/local/bin/start-all.sh" ]
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]

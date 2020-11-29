@@ -1,11 +1,20 @@
+jupyterlab
+
+# For Spark
 pyspark
-matplotlib # Only for dev
+
+# For the demo NoteBook
 scipy
 sklearn
 pandas
 numpy
 nltk
-# To plot graph :
-xcffib
-cairocffi
-python-igraph
+
+# For Plotting
+seaborn
+matplotlib
+plotly
+
+# For Twitter
+requests_oauthlib
+flask
