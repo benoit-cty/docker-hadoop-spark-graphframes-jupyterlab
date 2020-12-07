@@ -28,16 +28,16 @@ docker build -t spark-graphframes:local .
 
 ```
 docker run -it \
-    -p 9870:9870 \
-    -p 8088:8088 \
-    -p 8080:8080 \
-    -p 18080:18080 \
-    -p 9000:9000 \
+    -p 9879:9870 \
+    -p 8988:8088 \
+    -p 8089:8080 \
+    -p 1808:18080 \
+    -p 9009:9000 \
     -p 8889:8888 \
     -p 7988:7988 \
     -p 9864:9864 \
     -p 4046:4046 \
-    -p 4040:4040 \
+    -p 4049:4040 \
     -p 5001:5001 \
     -v /media/data-nvme/dev/src/docker-hadoop-spark-graphframes-jupyterlab/demo:/root/ipynb \
     -e PYSPARK_MASTER=spark://localhost:7077 \
@@ -57,12 +57,12 @@ To limit CPU and memory you could use :
 
 
 Availiable URL :
-- [Hadoop WebUI for NameNode](http://localhost:9870)
+- [Hadoop WebUI for NameNode](http://localhost:9879)
 - [Hadoop DataNode](http://localhost:9864)
 - [YARN Resourcemanager](http://localhost:8088)
-- [Spark Master Web Console](http://localhost:8080)
-- [Spark History Server](http://localhost:18080)
-- [Spark Job Web Console](http://localhost:4040)
+- [Spark Master Web Console](http://localhost:8089)
+- [Spark History Server](http://localhost:1808)
+- [Spark Job Web Console](http://localhost:4049)
 - [Spark Notebooks](http://localhost:8889) : A notebook launched by pySpark to use GraphFrames
 - [Jupyter Lab Notebooks](http://localhost:7988) : An independant Notebook to use Spark like if you were outside the container.
 - [SparkStreaming + Flask + ChartJS Twitter Dashboard](http://localhost:5001) (you have to start it manualy)
