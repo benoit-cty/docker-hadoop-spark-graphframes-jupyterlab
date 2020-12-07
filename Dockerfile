@@ -66,8 +66,9 @@ VOLUME [ "/root/ipynb" ]
 # Setup Python env
 # NodeJS for Jupyter
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt-get install -y nodejs
-RUN pip install jupyterlab plotly
+RUN apt-get install -y nodejs && apt-get clean
+RUN pip install jupyterlab plotly spylon-kernel
+RUN python -m spylon_kernel install
 RUN jupyter labextension install jupyterlab-plotly
 
 COPY requirements.txt .
