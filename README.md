@@ -36,7 +36,7 @@ docker run -it \
     -p 8889:8888 \
     -p 7988:7988 \
     -p 9864:9864 \
-    -p 4046:4046 \
+    -p 4946:4046 \
     -p 4049:4040 \
     -p 5001:5001 \
     -v /media/data-nvme/dev/src/docker-hadoop-spark-graphframes-jupyterlab/demo:/root/ipynb \
