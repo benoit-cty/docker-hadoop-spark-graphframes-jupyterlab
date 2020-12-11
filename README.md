@@ -33,7 +33,7 @@ docker run -it \
     -p 8089:8080 \
     -p 1808:18080 \
     -p 9009:9000 \
-    -p 8889:8888 \
+    -p 8892:8888 \
     -p 7988:7988 \
     -p 9864:9864 \
     -p 4946:4046 \
@@ -59,11 +59,11 @@ To limit CPU and memory you could use :
 Availiable URL :
 - [Hadoop WebUI for NameNode](http://localhost:9879)
 - [Hadoop DataNode](http://localhost:9864)
-- [YARN Resourcemanager](http://localhost:8088)
+- [YARN Resourcemanager](http://localhost:8988)
 - [Spark Master Web Console](http://localhost:8089)
 - [Spark History Server](http://localhost:1808)
 - [Spark Job Web Console](http://localhost:4049)
-- [Spark Notebooks](http://localhost:8889) : A notebook launched by pySpark to use GraphFrames
+- [Spark Notebooks](http://localhost:8892) : A notebook launched by pySpark to use GraphFrames
 - [Jupyter Lab Notebooks](http://localhost:7988) : An independant Notebook to use Spark like if you were outside the container.
 - [SparkStreaming + Flask + ChartJS Twitter Dashboard](http://localhost:5001) (you have to start it manualy)
 
