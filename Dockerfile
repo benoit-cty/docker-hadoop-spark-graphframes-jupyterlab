@@ -4,6 +4,8 @@
 # Debian Buster with Python
 FROM python:3.8-buster 
 
+
+
 ENV HDFS_NAMENODE_USER=root
 ENV HDFS_DATANODE_USER=root
 ENV HDFS_SECONDARYNAMENODE_USER=root
@@ -18,10 +20,10 @@ ENV HADOOP_IDENT_STRING=root
 ENV HADOOP_MAPRED_IDENT_STRING=root
 ENV HADOOP_MAPRED_HOME=${HADOOP_HOME}
 ENV SPARK_HOME=/usr/local/spark
-ENV CONDA_HOME=/usr/local/conda
 ENV PYSPARK_MASTER=yarn
-ENV PATH=${CONDA_HOME}/bin:${SPARK_HOME}/bin:${HADOOP_HOME}/bin:${PATH}
+ENV PATH=${SPARK_HOME}/bin:${HADOOP_HOME}/bin:${PATH}
 ENV NOTEBOOK_PASSWORD=""
+ENV SPARK_MASTER_HOST=localhost
 
 # setup Debian
 RUN apt-get update -y \
@@ -36,19 +38,17 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.11.0-openjdk-amd64
 
 
 # install hadoop
+
 RUN wget -q http://apache.mirrors.tds.net/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz -O /tmp/hadoop.tar.gz \
-    && tar -xzf /tmp/hadoop.tar.gz -C /usr/local/ \
-    && ln -s /usr/local/hadoop-3.3.0 /usr/local/hadoop \
-    && rm -fr /usr/local/hadoop/etc/hadoop/* \
-    && mkdir /usr/local/hadoop/extras \
-    && mkdir /var/hadoop \
-	&& mkdir /var/hadoop/hadoop-datanode \
+    && tar -xzf /tmp/hadoop.tar.gz -C /usr/local/ && rm -fr /usr/local/hadoop-3.3.0/etc/hadoop/*
+RUN ln -s /usr/local/hadoop-3.3.0 $HADOOP_HOME \
+    && mkdir $HADOOP_HOME/extras \
+	&& mkdir -p /var/hadoop/hadoop-datanode \
 	&& mkdir /var/hadoop/hadoop-namenode \
-	&& mkdir /var/hadoop/mr-history \
-	&& mkdir /var/hadoop/mr-history/done \
+	&& mkdir -p /var/hadoop/mr-history/done \
 	&& mkdir /var/hadoop/mr-history/tmp
 
-
+RUN mkdir -p /usr/local/hadoop/logs
 # install spark
 RUN wget -q https://miroir.univ-lorraine.fr/apache/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz -O /tmp/spark.tgz \
     && tar -xzf /tmp/spark.tgz -C /usr/local/ \
@@ -65,12 +65,13 @@ VOLUME [ "/root/ipynb" ]
 
 # Setup Python env
 # NodeJS for Jupyter
+
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs && apt-get clean
 RUN python -m pip install --upgrade pip && pip install jupyterlab plotly spylon-kernel
 RUN python -m spylon_kernel install
 RUN jupyter labextension install jupyterlab-plotly
-
+RUN jupyter labextension install @jupyterlab/toc
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -91,9 +92,32 @@ COPY config-files/usr/local/spark/conf/* /usr/local/spark/conf/
 COPY config-files/usr/local/hadoop/etc/hadoop/* /usr/local/hadoop/etc/hadoop/
 COPY config-files/usr/local/hadoop/extras/* /usr/local/hadoop/extras/
 RUN $HADOOP_HOME/bin/hdfs namenode -format hadoopnode
-# clean up
+# clean up : useless because already in previous layers :(
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && mkdir /tmp/spark-events
+
+# Spark Master
+EXPOSE 7077
+# Hadoop WebUI for NameNode
+EXPOSE 9870
+# YARN Resourcemanager
+EXPOSE 8088
+# Spark Master Web Console
+EXPOSE 8080
+# Spark History Server
+EXPOSE 18080
+EXPOSE 9000
+# Spark Jupyter Notebook
+EXPOSE 8888
+# Jupyter Lab Notebooks
+EXPOSE 7988
+# Hadoop DataNode
+EXPOSE 9864
+EXPOSE 4046
+# Spark Job Web Console
+EXPOSE 4040
+# Flask
+EXPOSE 5001
 
 COPY config-files/usr/local/bin/start-all.sh /usr/local/bin/start-all.sh
 RUN chmod a+x /usr/local/bin/start-all.sh

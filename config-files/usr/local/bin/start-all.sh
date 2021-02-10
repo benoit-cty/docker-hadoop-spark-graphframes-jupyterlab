@@ -5,6 +5,14 @@ echo "Java home JAVA_HOME=$JAVA_HOME"
 service ssh start
 echo "started ssh"
 
+export PATH=${SPARK_HOME}/bin:${HADOOP_HOME}/bin:${PATH}
+
+if [[ -z "${SPARK_MASTER_HOST}" ]]; then
+  export SPARK_MASTER_HOST=localhost
+fi
+echo "SPARK_MASTER_HOST=$SPARK_MASTER_HOST"
+echo "HADOOP_OPTS=$HADOOP_OPTS"
+
 echo "Starting hadoop"
 echo "export JAVA_HOME=$JAVA_HOME" >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 $HADOOP_HOME/sbin/start-all.sh
@@ -38,9 +46,9 @@ else
 fi
 
 echo "Starting Jupyter"
-cd /root/ipynb && jupyter lab --ip='*' --port=7988 --no-browser --allow-root  --NotebookApp.password=$NOTEBOOK_PASSWORD &
+cd /root/ipynb && jupyter lab --ip='*' --port=7988 --no-browser --allow-root --ServerApp.token='' --ServerApp.password=$NOTEBOOK_PASSWORD &
 
-echo "done!"
+echo "Going in infinite loop..."
 
 while sleep 600; do
   ps aux |grep jupyter |grep -q -v grep

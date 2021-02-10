@@ -27,11 +27,11 @@
 # - SPARK_PUBLIC_DNS, to set the public dns name of the driver program
 HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
 YARN_CONF_DIR=/usr/local/hadoop/etc/hadoop
-SPARK_MASTER_HOST=localhost
+SPARK_MASTER_HOST=$SPARK_MASTER_HOST
 PYSPARK_PYTHON=/usr/local/bin/python3.8
 #PYSPARK_DRIVER_PYTHON=$PYSPARK_PYTHON
 PYSPARK_DRIVER_PYTHON=jupyter
-PYSPARK_DRIVER_PYTHON_OPTS="lab --port 8888 --notebook-dir='~/ipynb' --ip='*' --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='$NOTEBOOK_PASSWORD'"
+PYSPARK_DRIVER_PYTHON_OPTS="lab --port 8888 --notebook-dir='~/ipynb' --ip='*' --no-browser --allow-root --ServerApp.token='' --ServerApp.password='$NOTEBOOK_PASSWORD'"
 PYTHONPATH=$PYTHONPATH:/usr/local/hadoop/extras/:.
 
 # Options read by executors and drivers running inside the cluster

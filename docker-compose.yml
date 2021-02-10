@@ -1,0 +1,102 @@
+version: '3.7'
+services:
+  spark-master:
+    container_name: spark-master
+    build: .
+    environment:
+      PYSPARK_MASTER: spark://spark-master:7077
+      SPARK_MASTER_HOST: spark-master
+      JAVA_HOME: /usr/lib/jvm/java-1.11.0-openjdk-amd64
+      NOTEBOOK_PASSWORD: ''
+      HADOOP_OPTS: "-Ddfs.datanode.hostname=spark-master -Ddfs.namenode.rpc-bind-host=0.0.0.0"
+    networks:
+      - spark
+    ports:
+    - "9879:9870"
+    - "8988:8088"
+    - "8089:8080"
+    - "1808:18080"
+    - "9009:9000"
+    - "8892:8888"
+    - "7988:7988"
+    - "9864:9864"
+    - "4946:4046"
+    - "4049:4040"
+    - "5001:5001"
+    - "7077:7077"
+    volumes:
+    - "./demo:/root/ipynb"
+
+
+  spark-worker-1:
+    image: bde2020/spark-worker:3.0.1-hadoop3.2
+    container_name: spark-worker-1
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+    networks:
+      - spark
+    deploy:
+      resources:
+        limits:
+          cpus: "10"
+          memory: 15G
+
+  spark-worker-2:
+    image: bde2020/spark-worker:3.0.1-hadoop3.2
+    container_name: spark-worker-2
+    depends_on:
+      - spark-master
+    ports:
+      - "8082:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+    networks:
+      - spark
+    deploy:
+      resources:
+        limits:
+          cpus: "10"
+          memory: 15G
+
+  spark-worker-3:
+    image: bde2020/spark-worker:3.0.1-hadoop3.2
+    container_name: spark-worker-3
+    depends_on:
+      - spark-master
+    ports:
+      - "8083:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+    networks:
+      - spark
+    deploy:
+      resources:
+        limits:
+          cpus: "10"
+          memory: 15G
+
+
+  spark-worker-4:
+    image: bde2020/spark-worker:3.0.1-hadoop3.2
+    container_name: spark-worker-4
+    depends_on:
+      - spark-master
+    ports:
+      - "8084:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+    networks:
+      - spark
+    deploy:
+      resources:
+        limits:
+          cpus: "10"
+          memory: 15G
+
+networks:
+  spark:
+    name: spark_network

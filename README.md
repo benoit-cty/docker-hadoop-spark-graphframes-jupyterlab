@@ -1,5 +1,4 @@
-# docker-hadoop-spark-graphframes-jupyterlab
-Dockerfile for Hadoop+Spark+GraphFrames+Jupyterlab
+# Docker version of Hadoop+Spark+GraphFrames+Jupyterlab
 
 This repo is made for giving an easy way to learn Spark and Hadoop. In the demo folder you have many demo notebooks using pySpark.
 
@@ -13,18 +12,40 @@ Version used as of november 2020 :
 
 The spark demo dataset and the local demo/data folder are copied in HDFS at startup. 
 
-If you want to use spark-submit with Python code you have to make a change in config-files/usr/local/spark/conf/spark-env.sh to switch from Jupyter to Pyton :
-```
-PYSPARK_DRIVER_PYTHON=$PYSPARK_PYTHON
-#PYSPARK_DRIVER_PYTHON=jupyter
-#PYSPARK_DRIVER_PYTHON_OPTS="lab --port 8888 --notebook-dir='~/ipynb' --ip='*' --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='$NOTEBOOK_PASSWORD'"
-```
 
 
+How to run :
 ```
-docker build -t spark-graphframes:local .
+docker-compose --compatibility up
 ```
-(If problem, try with '--no-cache')
+
+To stop it : Ctrl+C
+
+Availiable URL :
+- [Hadoop WebUI for NameNode](http://localhost:9879)
+- [Hadoop DataNode](http://localhost:9864)
+- [YARN Resourcemanager](http://localhost:8988)
+- [Spark Master Web Console](http://localhost:8089)
+- [Spark History Server](http://localhost:1808)
+- [Spark Job Web Console](http://localhost:4049)
+- [Spark Notebooks](http://localhost:8892) : A notebook launched by pySpark to use GraphFrames
+- [Jupyter Lab Notebooks](http://localhost:7988) : An independant Notebook to use Spark like if you were outside the container.
+- [SparkStreaming + Flask + ChartJS Twitter Dashboard](http://localhost:5001) (you have to start it manualy)
+
+## Annexes
+
+
+If you want to use spark-submit with Python code you have to force the Python interpreter like this :
+```
+spark-submit --master spark://spark-master:7077 \
+  --conf "spark.pyspark.python=$PYSPARK_PYTHON" \
+  --conf "spark.pyspark.driver.python=$PYSPARK_PYTHON"\
+  --name wordcount "/usr/local/spark-3.0.1-bin-hadoop3.2/examples/src/main/python/wordcount.py" \
+  /demo/txt/victor_hugo-texts.txt
+```
+
+To run only one container :
+```
 
 ```
 docker run -it \
@@ -46,8 +67,6 @@ docker run -it \
     spark-graphframes:local
 ```
 
-To stop it : Ctrl+C
-
 To limit CPU and memory you could use :
 ```
     --memory=16G \
@@ -55,17 +74,11 @@ To limit CPU and memory you could use :
     --cpus=16 \
 ```
 
-
-Availiable URL :
-- [Hadoop WebUI for NameNode](http://localhost:9879)
-- [Hadoop DataNode](http://localhost:9864)
-- [YARN Resourcemanager](http://localhost:8988)
-- [Spark Master Web Console](http://localhost:8089)
-- [Spark History Server](http://localhost:1808)
-- [Spark Job Web Console](http://localhost:4049)
-- [Spark Notebooks](http://localhost:8892) : A notebook launched by pySpark to use GraphFrames
-- [Jupyter Lab Notebooks](http://localhost:7988) : An independant Notebook to use Spark like if you were outside the container.
-- [SparkStreaming + Flask + ChartJS Twitter Dashboard](http://localhost:5001) (you have to start it manualy)
+To only build :
+```
+docker build -t spark-graphframes:local .
+```
+(If problem, try with '--no-cache')
 
 To go inside the container if needed :
 ```
@@ -75,3 +88,4 @@ docker exec -it <container id> /bin/bash
 But you could also use the terminal of Jupyter.
 
 A great thanks to https://github.com/oneoffcoder/docker-containers/tree/master/spark-jupyter and https://github.com/dsaidgovsg/python-spark/blob/master/python3/spark2.1/Dockerfile for the Docker part. I've updated some components to make things work.
+
